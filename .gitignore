@@ -8,3 +8,4 @@ copies/
 .ipynb_checkpoints/
 build/
 gtab.egg-info/
+example/example_path/*

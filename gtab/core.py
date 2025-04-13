@@ -13,7 +13,7 @@ import warnings
 import networkx as nx
 import numpy as np
 import pandas as pd
-from pytrends.request import TrendReq
+from trendspy import Trends
 from tqdm import tqdm
 
 
@@ -95,7 +95,7 @@ class GTAB:
         self.HITRAFFIC = self.CONFIG["HITRAFFIC"]
 
         self.active_gtab = None
-        self.pytrends = TrendReq(hl='en-US', **self.CONFIG['CONN'])
+        self.pytrends = Trends(**self.CONFIG['CONN'])
 
         # sets default anchorbank
         if not self.from_cli:
@@ -126,12 +126,10 @@ class GTAB:
 
         # avoids duplicate query
         if len(keywords) == 2 and keywords[0] == keywords[1]:
-            self.pytrends.build_payload(kw_list=[keywords[0]], **self.CONFIG['PYTRENDS'])
-            ret = self.pytrends.interest_over_time()
+            ret = self.pytrends.interest_over_time([keywords[0]], **self.CONFIG['PYTRENDS'])
             ret.insert(loc=1, column="tmp", value=ret.iloc[:, 0])
         else:
-            self.pytrends.build_payload(kw_list=keywords, **self.CONFIG['PYTRENDS'])
-            ret = self.pytrends.interest_over_time()
+            ret = self.pytrends.interest_over_time(keywords, **self.CONFIG['PYTRENDS'])
         return ret
 
     def _is_not_blacklisted(self, keyword):
@@ -710,7 +708,7 @@ class GTAB:
 
         # update objects whose state depends on config jsons
         self.CONFIG['CONN']['timeout'] = tuple(self.CONFIG['CONN']['timeout'])
-        self.pytrends = TrendReq(hl='en-US', **self.CONFIG['CONN'])
+        self.pytrends = Trends(**self.CONFIG['CONN'])
 
         if overwite_file:
             if self.from_cli:

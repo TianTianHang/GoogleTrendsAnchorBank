@@ -11,7 +11,7 @@ setup(name='gtab',
       include_package_data=True,
       install_requires=[
           'networkx',
-          'pytrends',
+          'trendspy',
           'tqdm',
           'pandas',
           'numpy',
